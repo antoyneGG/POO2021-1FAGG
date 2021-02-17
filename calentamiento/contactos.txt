@@ -1,0 +1,9 @@
+----------------
+Nombre: Fabian
+Apellidos: Garcia
+Numero telefonico: 12345
+----------------
+Nombre: Mijel
+Apellidos: Gallego
+Numero telefonico: 34456
+----------------
