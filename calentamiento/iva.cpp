@@ -1,7 +1,7 @@
 #include <iostream>
 const float iva = 0.19;
 
-int ivaCalculation(int price){
+float ivaCalculation(float price){
     return price * iva;
 }
 
