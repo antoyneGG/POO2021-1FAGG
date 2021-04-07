@@ -1,0 +1,6 @@
+Igualdad A = B
+F = (A2 XNOR B2).(A1 XNOR B1).(A0 XNOR B0)
+
+G = [(A2.B2')+(A2 XNOR B2)].[(A1.B1')+(A2 XNOR B2)+(A1 XNOR B1)].(A0.B0')
+
+H = F'.G'
