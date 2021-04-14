@@ -14,6 +14,8 @@ cantPersonasGraduadasEspMastEnCurso = 0
 cantPersonasSustentacion = 0
 cantPersonasPendientesEsp = 0
 cantPersonasPendientesMast = 0
+cantPersonasMatriculaEsp = 0
+cantPersonasMatriculaMast = 0
 
 def recolectarInformacionEstudiantes():
     global cantPersonasGraduadasEsp
@@ -23,6 +25,8 @@ def recolectarInformacionEstudiantes():
     global cantPersonasSustentacion
     global cantPersonasPendientesEsp
     global cantPersonasPendientesMast
+    global cantPersonasMatriculaEsp
+    global cantPersonasMatriculaMast
     cel = ''
     split_a_book("ConsolidadoEstudiantes-Graduados20162_a_20202.xlsx", "output.xlsx")
     outputfiles = glob.glob("*_output.xlsx")
@@ -39,6 +43,10 @@ def recolectarInformacionEstudiantes():
                 for est in listaEstudiantes:
                     if(r['Emplid'] == est.empleid):
                         evaluar = True
+                        if(r['Código'] == "20005"):
+                            est.setEstudiandoMaestria(1)
+                        elif(r['Código'] == "20007"):
+                            est.setEstudiandoEspecializacion(1)
                 if(not evaluar):
                     estudiante = Estudiante(r['Nombres'],r['Emplid'],r['Documento'],r['Email'],r[cel],r['Periodo'])
                     if(r['Código'] == "20005"):
@@ -46,6 +54,12 @@ def recolectarInformacionEstudiantes():
                     elif(r['Código'] == "20007"):
                         estudiante.setEstudiandoEspecializacion(1)
                     listaEstudiantes.append(estudiante)
+
+    for est in listaEstudiantes:
+        if(est.estudiandoMaestria):
+            cantPersonasMatriculaMast += 1
+        if(est.estudiandoEspecializacion):
+            cantPersonasMatriculaEsp += 1
 
     graduadosMast = p.get_records(file_name = 'GraduadosMaestria_output.xlsx')
     for g in graduadosMast:
@@ -75,14 +89,12 @@ def recolectarInformacionEstudiantes():
             if(est.documento == str(t['DOCUMENTO'])):
                 est.setTrabajoGrado(t['TÍTULO'],t['FECHA'],t['DIRECTOR'])
                 cantPersonasSustentacion += 1
-    
+
     for est in listaEstudiantes:
         if(est.estudiandoMaestria):
             cantPersonasPendientesMast += 1
-        elif(est.estudiandoEspecializacion):
+        if(est.estudiandoEspecializacion):
             cantPersonasPendientesEsp += 1
-
-
 
 def guardarInformacion():
     dict_estudiantes = OrderedDict()
@@ -100,8 +112,10 @@ def guardarInformacion():
     dict_estudiantes.update({"Linkedin": []})
     dict_estudiantes.update({"Ultimo rol": []})
     dict_estudiantes.update({"Trabajo de grado": []})
-    dict_estudiantes.update({"Anio de sustentacion": []})
+    dict_estudiantes.update({"Año de sustentacion": []})
     dict_estudiantes.update({"Director": []})
+    dict_estudiantes.update({"Pendiente de especializacion": []})
+    dict_estudiantes.update({"Pendiente de maestria": []})
 
     dato = ""
     for key in dict_estudiantes.keys():
@@ -139,16 +153,26 @@ def guardarInformacion():
                 dato = estudiante.ultimoRol
             elif(key == "Trabajo de grado"):
                 dato = estudiante.nombreTrabajoGrado
-            elif(key == "Anio de sustentacion"):
+            elif(key == "Año de sustentacion"):
                 dato = estudiante.anioSustentacion
             elif(key == "Director"):
                 dato = estudiante.nombreDirector
+            elif(key == "Pendiente de especializacion"):
+                if(estudiante.estudiandoEspecializacion):
+                    dato = "Si"
+                else:
+                    dato = "No"
+            elif(key == "Pendiente de maestria"):
+                if(estudiante.estudiandoMaestria):
+                    dato = "Si"
+                else:
+                    dato = "No"
             lista.append(dato)
         dict_estudiantes[key] = lista
 
     p.save_as(adict=dict_estudiantes, dest_file_name='estudiantes_merge.xlsx')
 
-    resumen = [["Detalle", "Dato"], ["Cantidad de personas que se han graduado solo de la especializacion a la fecha", cantPersonasGraduadasEsp], ["Cantidad de personas que se han graduado solo de la maestria a la fecha", cantPersonasGraduadasMast], ["Cantidad de personas que ya se han graduado de especializacion y maestria", cantPersonasGraduadasEspMast], ["Cantidad de personas de la maestria que han optado por el grado de especialistas pero no se han graduado todavia", cantPersonasGraduadasEspMastEnCurso], ["Cantidad de personas que han sustentado el trabajo de grado", cantPersonasSustentacion], ["Cantidad de personas pendientes por tesis de especializacion", cantPersonasPendientesEsp], ["Cantidad de personas pendientes por tesis de maestria", cantPersonasPendientesMast]]
+    resumen = [["Detalle", "Dato"], ["Cantidad de personas que se han graduado solo de la especializacion a la fecha", cantPersonasGraduadasEsp], ["Cantidad de personas que se han graduado solo de la maestria a la fecha", cantPersonasGraduadasMast], ["Cantidad de personas que ya se han graduado de especializacion y maestria", cantPersonasGraduadasEspMast], ["Cantidad de personas de la maestria que han optado por el grado de especialistas pero no se han graduado todavia", cantPersonasGraduadasEspMastEnCurso], ["Cantidad de personas que han sustentado el trabajo de grado", cantPersonasSustentacion], ["Cantidad de personas pendientes por grado de especializacion", cantPersonasPendientesEsp], ["Cantidad de personas pendientes por tesis de maestria", cantPersonasPendientesMast], ["Cantidad de personas que han matriculado especializacion", cantPersonasMatriculaEsp], ["Cantidad de personas que han matriculado maestria", cantPersonasMatriculaMast]]
     p.save_as(array = resumen, dest_file_name="resumen_merge.xlsx")
 
     merge_all_to_a_book(glob.glob("*_merge.xlsx"), "Datos_Especializacion_Maestria.xlsx")
