@@ -5,6 +5,8 @@ import pyexcel as p
 from pyexcel._compact import OrderedDict
 from pyexcel.cookbook import split_a_book
 from pyexcel.cookbook import merge_all_to_a_book
+from tkinter.filedialog import askopenfilename
+from tkinter import Tk 
 
 listaEstudiantes = []
 cantPersonasGraduadasEsp = 0
@@ -28,7 +30,9 @@ def recolectarInformacionEstudiantes():
     global cantPersonasMatriculaEsp
     global cantPersonasMatriculaMast
     cel = ''
-    split_a_book("ConsolidadoEstudiantes-Graduados20162_a_20202.xlsx", "output.xlsx")
+    Tk().withdraw()
+    path = askopenfilename()
+    split_a_book(path, "output.xlsx")
     outputfiles = glob.glob("*_output.xlsx")
     for file in sorted(outputfiles):
         print(file + "\n")
