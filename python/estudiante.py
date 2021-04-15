@@ -1,11 +1,12 @@
 class Estudiante:
-    def __init__(self, nombre, empleid, documento, email, telefono, primera_matricula_periodo):
+    def __init__(self, nombre, empleid, documento, email, telefono, primera_matricula_periodo, primera_matricula):
         self.nombre = nombre
         self.empleid = empleid
         self.documento = documento
         self.email = email
         self.telefono = telefono
         self.primera_matricula_periodo = primera_matricula_periodo
+        self.primera_matricula = primera_matricula
         self.estudiandoMaestria = False
         self.estudiandoEspecializacion = False
         self.especializacion = False
@@ -24,8 +25,9 @@ class Estudiante:
     def setMast(self, periodo_grado_maestria):
         self.maestria = True
         self.periodo_grado_maestria = periodo_grado_maestria
-    def setPrimerPeriodoMatricula(self, primera_matricula_periodo):
+    def setPrimerPeriodoMatricula(self, primera_matricula_periodo, primera_matricula):
         self.primera_matricula_periodo = primera_matricula_periodo
+        self.primera_matricula = primera_matricula
         self.primerMatricula = True
     def setEstudiandoMaestria(self, codigo):
         if(codigo == 0):

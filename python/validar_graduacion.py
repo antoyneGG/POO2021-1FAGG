@@ -19,6 +19,15 @@ cantPersonasPendientesMast = 0
 cantPersonasMatriculaEsp = 0
 cantPersonasMatriculaMast = 0
 
+def string_to_int(string):
+    string = str(string)
+    string = list(string)
+    for word in string:
+        if(word == "-"):
+            string.remove(word)
+    string = "".join(string)
+    return int(string)
+
 def recolectarInformacionEstudiantes():
     global cantPersonasGraduadasEsp
     global cantPersonasGraduadasMast
@@ -47,12 +56,14 @@ def recolectarInformacionEstudiantes():
                 for est in listaEstudiantes:
                     if(r['Emplid'] == est.empleid):
                         evaluar = True
+                        if(string_to_int(r['Periodo']) < string_to_int(est.primera_matricula_periodo)):
+                            est.setPrimerPeriodoMatricula(r['Periodo'], r['Código'])
                         if(r['Código'] == "20005"):
                             est.setEstudiandoMaestria(1)
                         elif(r['Código'] == "20007"):
                             est.setEstudiandoEspecializacion(1)
                 if(not evaluar):
-                    estudiante = Estudiante(r['Nombres'],r['Emplid'],r['Documento'],r['Email'],r[cel],r['Periodo'])
+                    estudiante = Estudiante(r['Nombres'],r['Emplid'],r['Documento'],r['Email'],r[cel],r['Periodo'],r['Código'])
                     if(r['Código'] == "20005"):
                         estudiante.setEstudiandoMaestria(1)
                     elif(r['Código'] == "20007"):
@@ -108,6 +119,7 @@ def guardarInformacion():
     dict_estudiantes.update({"Documento": []})
     dict_estudiantes.update({"Email": []})
     dict_estudiantes.update({"Telefono": []})
+    dict_estudiantes.update({"Periodo primera matricula": []})
     dict_estudiantes.update({"Primera matricula": []})
     dict_estudiantes.update({"Graduado especializacion": []})
     dict_estudiantes.update({"Periodo grado especializacion": []})
@@ -135,8 +147,10 @@ def guardarInformacion():
                 dato = estudiante.email
             elif(key == "Telefono"):
                 dato = estudiante.telefono
-            elif(key == "Primera matricula"):
+            elif(key == "Periodo primera matricula"):
                 dato = estudiante.primera_matricula_periodo
+            elif(key == "Primera matricula"):
+                dato = estudiante.primera_matricula
             elif(key == "Graduado especializacion"):
                 if(estudiante.especializacion):
                     dato = "Si"
