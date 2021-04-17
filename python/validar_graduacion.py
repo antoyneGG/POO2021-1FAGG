@@ -38,9 +38,10 @@ def recolectarInformacionEstudiantes():
     global cantPersonasPendientesMast
     global cantPersonasMatriculaEsp
     global cantPersonasMatriculaMast
-    cel = ''
     Tk().withdraw()
     path = askopenfilename()
+    periodo_actual = str(input("Ingrese el periodo actual utilizando el siguiente formato (20XX-X): "))
+    cel = ''
     split_a_book(path, "output.xlsx")
     outputfiles = glob.glob("*_output.xlsx")
     for file in sorted(outputfiles):
@@ -58,12 +59,14 @@ def recolectarInformacionEstudiantes():
                         evaluar = True
                         if(string_to_int(r['Periodo']) < string_to_int(est.primera_matricula_periodo)):
                             est.setPrimerPeriodoMatricula(r['Periodo'], r['Código'])
+                        if(string_to_int(r['Periodo']) > string_to_int(est.ultima_matricula_periodo)):
+                            est.setUltimaMatriculaPeriodo(r['Periodo'])
                         if(r['Código'] == "20005"):
                             est.setEstudiandoMaestria(1)
                         elif(r['Código'] == "20007"):
                             est.setEstudiandoEspecializacion(1)
                 if(not evaluar):
-                    estudiante = Estudiante(r['Nombres'],r['Emplid'],r['Documento'],r['Email'],r[cel],r['Periodo'],r['Código'])
+                    estudiante = Estudiante(r['Nombres'],r['Emplid'],r['Documento'],r['Email'],r[cel],r['Periodo'],r['Código'],r['Periodo'])
                     if(r['Código'] == "20005"):
                         estudiante.setEstudiandoMaestria(1)
                     elif(r['Código'] == "20007"):
@@ -75,6 +78,8 @@ def recolectarInformacionEstudiantes():
             cantPersonasMatriculaMast += 1
         if(est.estudiandoEspecializacion):
             cantPersonasMatriculaEsp += 1
+        if(string_to_int(periodo_actual) - string_to_int(est.ultima_matricula_periodo) >= 11):
+            est.setMasDosSemestres()
 
     graduadosMast = p.get_records(file_name = 'GraduadosMaestria_output.xlsx')
     for g in graduadosMast:
@@ -124,7 +129,8 @@ def guardarInformacion():
     dict_estudiantes.update({"Graduado especializacion": []})
     dict_estudiantes.update({"Periodo grado especializacion": []})
     dict_estudiantes.update({"Graduado maestria": []})
-    dict_estudiantes.update({"Periodo grado maestria": []})
+    dict_estudiantes.update({"Periodo ultima matricula": []})
+    dict_estudiantes.update({"Mas de dos semestres desde ultima matricula": []})
     dict_estudiantes.update({"Linkedin": []})
     dict_estudiantes.update({"Ultimo rol": []})
     dict_estudiantes.update({"Trabajo de grado": []})
@@ -165,6 +171,13 @@ def guardarInformacion():
                     dato = "No"
             elif(key == "Periodo grado maestria"):
                 dato = estudiante.periodo_grado_maestria
+            elif(key == "Periodo ultima matricula"):
+                dato = estudiante.ultima_matricula_periodo
+            elif(key == "Mas de dos semestres desde ultima matricula"):
+                if(estudiante.masDosSemestres):
+                    dato = "Si"
+                else:
+                    dato = "No"
             elif(key == "Linkedin"):
                 dato = estudiante.linkedin
             elif(key == "Ultimo rol"):

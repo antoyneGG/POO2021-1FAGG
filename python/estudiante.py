@@ -1,5 +1,5 @@
 class Estudiante:
-    def __init__(self, nombre, empleid, documento, email, telefono, primera_matricula_periodo, primera_matricula):
+    def __init__(self, nombre, empleid, documento, email, telefono, primera_matricula_periodo, primera_matricula, ultima_matricula_periodo):
         self.nombre = nombre
         self.empleid = empleid
         self.documento = documento
@@ -7,6 +7,7 @@ class Estudiante:
         self.telefono = telefono
         self.primera_matricula_periodo = primera_matricula_periodo
         self.primera_matricula = primera_matricula
+        self.ultima_matricula_periodo = ultima_matricula_periodo
         self.estudiandoMaestria = False
         self.estudiandoEspecializacion = False
         self.especializacion = False
@@ -14,6 +15,7 @@ class Estudiante:
         self.maestria = False
         self.periodo_grado_maestria = ""
         self.primerMatricula = False
+        self.masDosSemestres = False
         self.linkedin = ""
         self.ultimoRol = ""
         self.nombreTrabajoGrado = ""
@@ -29,6 +31,8 @@ class Estudiante:
         self.primera_matricula_periodo = primera_matricula_periodo
         self.primera_matricula = primera_matricula
         self.primerMatricula = True
+    def setUltimaMatriculaPeriodo(self, ultima_matricula_periodo):
+        self.ultima_matricula_periodo = ultima_matricula_periodo
     def setEstudiandoMaestria(self, codigo):
         if(codigo == 0):
             self.estudiandoMaestria = False
@@ -46,3 +50,5 @@ class Estudiante:
     def setLinkedinUltimoRol(self, linkedin, ultimoRol):
         self.linkedin = linkedin
         self.ultimoRol = ultimoRol
+    def setMasDosSemestres(self):
+        self.masDosSemestres = True
