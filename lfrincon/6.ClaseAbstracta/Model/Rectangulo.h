@@ -6,11 +6,13 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "FiguraGeometrica.h"
+
 using std::cin;
 using std::cout;
 using std::endl;
 
-class Rectangulo
+class Rectangulo : public FiguraGeometrica
 {
 private:
     float ancho, largo;
@@ -19,8 +21,9 @@ public:
     Rectangulo(); //no olvidar
     Rectangulo(float, float);
     void mostrarFigura() const;
-    void calcularArea();
-    void calcularPerimetro();
+    virtual void calcularArea();
+    virtual void calcularPerimetro();
+    virtual void mostrarFigura(); // sobreescritura
     float getLargo();
     float getAncho();
     void setLargo(float);

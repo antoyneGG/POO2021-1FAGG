@@ -9,9 +9,11 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+#include "FiguraGeometrica.h"
+
 //CLASE CIRCULO
 
-class Circulo
+class Circulo : public FiguraGeometrica
 {
 private: //atributos
     float radio;
@@ -20,10 +22,10 @@ private: //atributos
 public:
     Circulo(); //NO OLVIDAR
     Circulo(float);
-    void mostrarFigura();
-    void calcularArea();
-    void calcularPerimetro();
-    float getRadio();
+    virtual void calcularArea() override;
+    virtual void calcularPerimetro() override;
+    virtual void mostrarFigura();
+    float getRadio() const;
     void setRadio(float);
 };
 

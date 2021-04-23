@@ -12,7 +12,9 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-class Triangulo
+#include "FiguraGeometrica.h"
+
+class Triangulo : public FiguraGeometrica
 {
 private:
     float base, altura;
@@ -20,9 +22,13 @@ private:
 public:
     Triangulo();
     Triangulo(float base, float altura);
-    void mostrarFigura();
-    void calcularArea();
-    void calcularPerimetro();
+    virtual void calcularArea();
+    virtual void calcularPerimetro();
+    virtual void mostrarFigura();
+    float getBase();
+    float getAltura();
+    void setBase(float);
+    void setAltura(float);
 };
 
 //#endif /* !TRIANGULO_H */

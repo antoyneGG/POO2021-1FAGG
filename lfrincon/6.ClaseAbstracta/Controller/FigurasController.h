@@ -1,8 +1,11 @@
-//#ifndef FIGURAS_CONTROLLER_H
-// Guardas
+#ifndef FIGURASCONTROLLER_H
+#define FIGURASCONTROLLER_H
+
+#include "../Model/FiguraGeometrica.h"
 #include "../Model/Circulo.h"
 #include "../Model/Triangulo.h"
 #include "../Model/Rectangulo.h"
+#include "../Model/Cuadrado.h"
 
 #include <iostream>
 #include <list>
@@ -20,22 +23,22 @@ private:
     list<Rectangulo> listaRectangulo;
     list<Circulo> listaCirculo;
     list<Triangulo> listaTriangulo;
+    list<Cuadrado> listaCuadrado;
+    list<FiguraGeometrica *> pListaFiguras; // Debe ser de apuntadores pq las clases abstractas no se pueden instanciar
 
 public:
-    //RECTANGULO
+    // Retorna referencia a la lista de rectangulos
     list<Rectangulo> &getListaRectangulo();
     void agregarRectagulo(float largo, float ancho);
     Rectangulo &encontrarMayorAncho();
-    Rectangulo &encontrarRectangulo(int);
-
-    //CIRCULO
     list<Circulo> &getListaCirculo();
     void agregarCirculo(float radio);
-    Circulo &encontrarCirculo(int);
-
-    //TRIANGULO
     list<Triangulo> &getListaTriangulo();
     void agregarTriangulo(float base, float altura);
-    Triangulo &encontrarTriangulo(int);
+    list<Cuadrado> &getListaCuadrado();
+    void agregarCuadrado(float lado);
+    list<FiguraGeometrica *> &getListaFiguras();
+    void llenarListaTodosDummy();
 };
 //#define FIGURAS_CONTROLLER_H
+#endif // FIGURASCONTROLLER_H

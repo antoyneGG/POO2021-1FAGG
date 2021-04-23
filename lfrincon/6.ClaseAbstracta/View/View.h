@@ -19,13 +19,13 @@ public:
     void pedirDatosRectangulo();
     void pedirDatosCirculo();
     void pedirDatosTriangulo();
+    void pedirDatosCuadrado();
     void mostrarRectangulos();
     void mostrarCirculos();
     void mostrarTriangulos();
+    void mostrarCuadrados();
+    void mostrarTodos();
     int mostrarMenu();
     void verPrincipal();
-    Rectangulo &pedirRectangulo();
-    Circulo &pedirCirculo();
-    Triangulo &pedirTriangulo();
 };
 //#define FIGURAS_CONTROLLER_H
